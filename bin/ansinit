@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# ansible.cfg
+cat << EOF > ansible.cfg
+[defaults]
+inventory = ./inventory
+
+[privilege_escalation]
+become = true
+
+EOF
+
+# inventory
+cat << EOF > inventory
+web1
+web2
+web3
+web4
+
+EOF
+
+
+#$ cd ~/ansible/06_hosts
+#$ chmod 755 ~/bin/ansinit
+#$ ansinit  파일을 생성할 폴더 내에서 실행

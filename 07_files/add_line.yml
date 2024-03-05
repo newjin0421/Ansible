@@ -1,0 +1,22 @@
+---
+- name: 파일에 라인 추가 예제 
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: 파일에 라인 추가 - /home/devops/users.txt 
+      lineinfile:
+        path: /home/devops/users.txt
+        line: This line was added by the lineinfile module.
+        state: present
+
+# --------------------------------------------------------------------
+
+# ---
+# - name: ADD test to an existing file
+#   hosts: all
+#   tasks:
+#     - name: Add asingle line of test to a file
+#       lineinfile:
+#         path: /home/devops/users.txt
+#         line: Thos line was added by the lineinfile module
+#         state: present

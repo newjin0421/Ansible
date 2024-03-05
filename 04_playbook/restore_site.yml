@@ -1,0 +1,40 @@
+- name: Restore the site - webservers group
+  hosts: webservers
+  tasks:
+    # 1. 방화벽 내리기
+    # 2. 서비스 내리기
+    # 3. 파일 삭제
+    # 4. 패키지 삭제
+
+    # 1. 방화벽 내리기
+    # firewall-cmd --permanent --remove-service=http
+    # firewall-cmd --reload
+    - name: Take down the firewall - http
+      firewalld:
+        service: http
+        permanent: yes 
+        state: disabled
+        immediate: yes
+
+    # 2. 서비스 내리기
+    # systemctl disable httpd
+    # systemctk stop httpd
+    - name: Down the service - httpd.service
+      ansible.builtin.service:
+        name: httpd
+        state: stopped
+        enabled: no
+
+    # 3. 파일 삭제
+    # rm -f /var/www/html/index.html
+    - name: Remove the file - /var/www/html/index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    # 4. 패키지 삭제
+    # yum remove httpd
+    - name: Remove a package - httpd
+      yum:
+        name: httpd
+        state: absent

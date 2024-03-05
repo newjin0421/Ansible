@@ -1,0 +1,38 @@
+- name: Restore the web server, DB
+  hosts: web1
+  tasks:
+    # 4. 방화벽 등록 해제
+    - name: Close the service ports - http, https, mysql
+      firewalld:
+        service: "{{ item }}"
+        permanent: no
+        state: disabled
+        immediate: no
+      loop:
+        - http
+        - https
+        - mysql
+
+    # 서비스 중지
+    - name: Stop the service
+      service:
+        name: httpd
+        state: stopped
+        enabled: no
+
+    # 파일 삭제
+    - name: Remove a file - /var/www/html/index.php
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    # 패키지 삭제
+    - name: Remove the packages - httpd, mariadb-server, php, php-mysqlnd, php-pdo
+      yum: 
+        name:
+          - httpd
+          - mariadb-server
+          - php
+          - php-mysqlnd
+          - php-pdo
+        state: absent

@@ -1,0 +1,21 @@
+---
+- name: Delete user accounts for all our servers
+  hosts: all
+  become: true
+  remote_user: ansible
+  vars_files:
+    - secret.yml
+    - secret2.yml
+  tasks:
+    - name: Delete user from secret.yml
+      user:
+        name: "{{ username }}"
+        password: "{{ pwhash }}"
+        state: absent
+        remove: yes
+    - name: Delete user from secret2.yml
+      user:
+        name: "{{ username }}"
+        password: "{{ pwhash|password_hash('sha512') }}"
+        state: absent
+        remove: yes

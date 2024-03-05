@@ -1,0 +1,19 @@
+---
+- name: 환경 파일 배포
+  gather_facts: no
+  hosts: all
+  tasks:
+    - name: 환경파일배포 - $HOME/.bashrc
+      template:
+        src: templates/bashrc.j2
+        dest: /home/devops/.bashrc
+        owner: devops
+        group: devops
+        mode: '0644'
+
+    - name: 파일배포 or 디렉토리 복사 - $HOME/.local/share/blesh/
+      template:
+        src: files/blesh
+        dest: /home/devops/.local/share/
+        owner: devops
+        group: devops

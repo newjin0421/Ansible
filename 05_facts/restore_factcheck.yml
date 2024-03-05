@@ -1,0 +1,44 @@
+---
+- name: Delete and stop Apache HTTPD
+  hosts: all
+  tasks:
+    - name: Unconfiguration firewall
+      firewalld:
+        service: http
+        permanent: yes
+        immediate: yes
+        state: disabled
+    - name: httpd is stopped
+      service:
+        name: httpd
+        state: stopped
+        enabled: no
+    - name: Delete File
+      file:
+        path: /var/www/html/index.html
+        state: absent
+    - name: package Delete
+      yum:
+        name: httpd
+        state: absent
+
+
+# ---
+# - name: Restore factcheck.yml
+#   hosts: all 
+#   gather_facts: no 
+#   tasks:
+#     - name: 방화벽 포트 닫기 
+#       firewalld: 
+#         service: http
+#         permanent: yes
+#         state: disabled 
+#         immediate: yes 
+#     - name: 파일지우기 
+#       file: 
+#         path: /var/www/html/index.html
+#         state: absent
+#     - name: 패키지 삭제 
+#       yum: 
+#         name: httpd 
+#         state: absent 

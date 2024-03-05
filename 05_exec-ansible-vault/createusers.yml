@@ -1,0 +1,28 @@
+---
+- name: 사용자 추가 예제
+  hosts: devservers
+  remote_user: devops
+  become: true
+  vars_files:
+    - vars/secret.yml
+  tasks:
+    - name: 사용자 추가 작업
+      user:
+        name: "{{ item.name }}"
+        password: "{{ item.pw | password_hash('sha512') }}"
+      with_items: "{{ newusers }}"
+
+
+# ---
+# - name: create user accounts for all our servers
+#   hosts: devservers
+#   remote_user: devops
+#   become: true
+#   vars_files:
+#     - vars/secret.yml
+#   tasks:
+#     - name: Creating users from secret.yml
+#       user:
+#         name: "{{  item.name }}"
+#         password: "{{ item.pw | password_hash('sha512') }}"
+#       with_items: "{{ newusers }}"

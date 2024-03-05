@@ -1,0 +1,40 @@
+---
+- name: restore_playbook.yml
+  hosts: ansible1.example.com
+  gather_facts: no
+
+  tasks:
+    - name: close port - http, https
+      firewalld:
+        service: "{{ item }}"
+        permanent: yes
+        immediate: yes
+        state: disabled
+      loop:
+        - http
+        - https
+
+    - name: /etc/httpd/secrets directory remove
+      file:
+        path: /etc/httpd/secrets
+        recurse: yes
+        state: directory
+
+    - name: /var/www/html/{index.html|.htaccess} file remove
+      file:
+        path: "/var/www/html/{{ item }}"
+        state: absent
+      loop:
+        - index.html
+        - .htaccess
+
+    - name: httpd service disable
+      service:
+        name: httpd
+        state: stopped
+        enabled: yes
+
+    - name: httpd package remove
+      yum:
+        name: httpd
+        state: absent

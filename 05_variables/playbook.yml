@@ -1,0 +1,61 @@
+---
+# ---------- 웹 서버 플레이북 ---------- 
+- name: Configure the webserver
+  hosts: web1.example.com
+  vars:
+    pkg_web: httpd
+    pkg_httpsweb: mod_ssl
+    pkg_python: python3-PyMySQL
+    file_web_index: /var/www/html/index.html
+    svc_web: httpd
+    fw_http: http
+    fw_https: https
+  tasks:
+  # 1. 패키지 설정 (httpd, mod_ssl)
+  # yum install httpd mod_ssl
+    - name: Install the packages - httpd, mod_ssl
+      yum: 
+        name:
+          - "{{pkg_web}}"
+          - "{{pkg_httpsweb}}"
+          - "{{pkg_python}}"
+        state: present
+
+  # 2. 서비스 설정 (/var/www/html/index.html)
+    - name: Create a file - /var/www/html/index.html
+      copy: 
+        content: '<h1> Test Web Server </h1>'
+        dest: "{{file_web_index}}"
+
+  # 3. 서비스 기동 (httpd.service)
+    - name: Start the service - httpd
+      service: 
+        name: "{{svc_web}}"
+        state: started
+        enabled: yes
+
+  # 4. 방화벽 등록 (http, https)
+    - name: Open the service - http, https
+      firewalld:
+        service: "{{ item }}"
+        permanent: yes
+        state: enabled
+        immediate: yes
+      loop:
+        - "{{fw_http}}"
+        - "{{fw_https}}"
+
+  # 5. SELinux Error 처리 (없으면 pass)
+  
+
+# ---------- 테스트 플레이북 ---------- 
+- name: Test internet web server
+  hosts: localhost
+  become: no
+  tasks:
+    - name: Connect to internet web server
+      uri:
+        url: http://web1.example.com
+        return_content: true
+        status_code: 200
+        

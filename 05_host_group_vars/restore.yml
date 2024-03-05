@@ -1,0 +1,30 @@
+---
+- name: Remove the packages
+  hosts: all
+  tasks: 
+    # yum remove httpd mariadb-server php mutt
+    # - name: 패키지 삭제
+    #   yum:
+    #     name: "{{ packages }}"
+    #     state: absent
+    #   vars:
+    #     packages:
+    #     - httpd
+    #     - mariadb-server
+    #     - php
+    #     - mutt
+
+    # yum remove httpd
+    # yum remove mariadb-server 
+    # ...
+    - name: 패키지 삭제 다른 방법
+      yum:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - httpd
+        - mariadb-server
+        - php
+        - mutt
+
+    

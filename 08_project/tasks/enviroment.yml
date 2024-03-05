@@ -1,0 +1,24 @@
+---
+- name:  패키지 설치 {{ packages }}
+  yum:
+    name: "{{packages}}"
+    state: latest
+
+- name: Start the {{ service }} service
+  service:
+    name: "{{ service }}"
+    enabled: true
+    state: started
+
+- name: Start the {{ service2 }} service
+  service:
+    name: "{{ service2 }}"
+    enabled: true
+    state: started
+
+
+  # - name: 서비스 기동 - {{ service }}
+  #   service:
+  #     name: "{{ service }}"
+  #     enabled: true
+  #     state: started

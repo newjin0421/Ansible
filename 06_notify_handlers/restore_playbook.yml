@@ -1,0 +1,24 @@
+---
+- name: Restore DB
+  hosts: databases
+  tasks:
+    # DB install
+    - name: httpd package remove
+      yum:
+        name: 
+          - mariadb
+          - python3-PyMySQL
+        state: absent
+
+# -----------------------------------------
+
+# ---
+# - name: Rstore playbook.yml
+#   hosts: databases
+#   tasks: 
+#     - name: MariaDB 패키지 삭제 
+#       yum: 
+#         name: 
+#           - mariadb-server 
+#           - python3-PyMySQL 
+#         state: absent 

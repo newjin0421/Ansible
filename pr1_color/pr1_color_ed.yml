@@ -1,0 +1,20 @@
+---
+- name: ADD pr1_edit
+  hosts: webservers
+  tasks:
+    - name: Add asingle line of test to a file
+      lineinfile:
+        path: /home/devops/.bashrc
+        line: export PS1='\[\e["{{ web }}";1m\][\u@\h\[\e[33;1m\] \w]\$ \[\e[m\]'
+        state: present
+    
+- name: adjust PS1
+  hosts: webservers
+  gather_facts: no
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: 적용
+      command: source /home/devops/.bashrc
+
